@@ -61,11 +61,58 @@ class Fib:
     [1, 1, 2, 3, 5]
     '''
 
+    def __init__(self, n=None):
+        self.n = n
+
+    def __repr__(self):
+        if self.n is None:
+            return 'Fib()'
+        else:
+            return f'Fib({self.n})'
+
+    def __iter__(self):
+        return FibIter(self.n)
+
 
 class FibIter:
     '''
     This is the iterator helper class for the Fib class.
     '''
+
+    def __init__(self, n):
+        self.n = n
+        self.fibs1 = 1
+        self.fibs2 = 1
+        self.i = 1
+        self.result = 0
+
+    def __next__(self):
+        if self.n is None:
+            if self.i == 1:
+                self.i += 1
+                return self.fibs1
+            if self.i == 2:
+                self.i += 1
+                return self.fibs2
+            self.i += 1
+            self.result = self.fibs1 + self.fibs2
+            self.fibs1 = self.fibs2
+            self.fibs2 = self.result
+            return self.result
+        elif self.i >= self.n + 1:
+            raise StopIteration
+        else:
+            if self.i == 1:
+                self.i += 1
+                return self.fibs1
+            if self.i == 2:
+                self.i += 1
+                return self.fibs2
+            self.i += 1
+            self.result = self.fibs1 + self.fibs2
+            self.fibs1 = self.fibs2
+            self.fibs2 = self.result
+            return self.result
 
 
 def fib_yield(n=None):
@@ -73,3 +120,23 @@ def fib_yield(n=None):
     This function returns a generator that computes the first n fibonacci numbers.
     If n is None, then the generator is infinite.
     '''
+
+    fibs1 = 1
+    fibs2 = 1
+    if n is None:
+        yield fibs1
+        yield fibs2
+        while True:
+            yield fibs1 + fibs2
+            temp = fibs1 + fibs2
+            fibs1 = fibs2
+            fibs2 = temp
+    if n >= 1:
+        yield fibs1
+    if n >= 2:
+        yield fibs2
+    for i in range(2, n):
+        yield fibs1 + fibs2
+        temp = fibs1 + fibs2
+        fibs1 = fibs2
+        fibs2 = temp
