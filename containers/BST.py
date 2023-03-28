@@ -58,7 +58,9 @@ class BST(BinaryTree):
         HINT:
         Convert the contents of both trees into a sorted list,
         then compare those sorted lists for equality.
-        '''
+        do this with an inorder traversal
+        ''' 
+        return self.inorder(self.root, []) == t2.inorder(t2.root, [])
 
     def is_bst_satisfied(self):
         '''
