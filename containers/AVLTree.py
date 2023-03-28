@@ -69,7 +69,6 @@ class AVLTree(BST):
         and the textbook provides full python code.
         The textbook's class hierarchy for their AVL tree code is fairly different from our class hierarchy,
         however, so you will have to adapt their code.
-        
         return a copy of a new tree with new structure
         '''
         # old root - old right child
@@ -87,7 +86,6 @@ class AVLTree(BST):
         new.root.left.left = node.left
         new.root.left.right = node.right.left
         return new
-
 
     @staticmethod
     def _right_rotate(node):
@@ -109,47 +107,46 @@ class AVLTree(BST):
         # BF: 2 -> [-2, -1, 0]
         # have separate case for root
         new = AVLTree()
-        new.root = Node(node.left.value) # old left becomes parent
-        #print(str(new))
-        new.root.right = Node(node.value) # old root becomes right child
-        #print(str(new))
-        #left_child = node.left.left # all left children of old left
-        #print("left_child=", left_child)
-        new.root.left = node.left.left #left_child
-        #print(str(new))
-        #location = new.root
-        #print("location=", location)
+        new.root = Node(node.left.value)  # old left becomes parent
+        # print(str(new))
+        new.root.right = Node(node.value)  # old root becomes right child
+        # print(str(new))
+        # left_child = node.left.left # all left children of old left
+        # print("left_child=", left_child)
+        new.root.left = node.left.left  # left_child
+        # print(str(new))
+        # location = new.root
+        # print("location=", location)
         # while left_child:
-          #  location.left = left_child
-          #  left_child = left_child.left
-          #  print("left_child=", left_child)
-          #  location = location.left
-          #  print("location=", location)
-          #  print(str(new))
+        #  location.left = left_child
+        #  left_child = left_child.left
+        #  print("left_child=", left_child)
+        #  location = location.left
+        #  print("location=", location)
+        #  print(str(new))
         new.root.right.right = node.right
-        #print(str(new))
-        #right_child = node.right
-        #print("right_child=", right_child)
-        #location = new.root.right
-        #print("location=", location)
-        #while right_child:
-           #location.right = right_child
-           #right_child = right_child.right
-           #print("right_child=", right_child)
-           #location = location.right
-           #print("location=", location)
-           #print(str(new))
+        # print(str(new))
+        # right_child = node.right
+        # print("right_child=", right_child)
+        # location = new.root.right
+        # print("location=", location)
+        # while right_child:
+        #  location.right = right_child
+        #  right_child = right_child.right
+        #  print("right_child=", right_child)
+        #  location = location.right
+        #  print("location=", location)
+        #  print(str(new))
         new.root.right.left = node.left.right
-        #print(str(new))
-        #weird_child = node.left.right
-        #location = new.root.right
-        #while weird_child:
-            #location.left = weird_child
-            #weird_child = weird_child.left
-            #location = location.left
-            #print(str(new))
+        # print(str(new))
+        # weird_child = node.left.right
+        # location = new.root.right
+        # while weird_child:
+        #    location.left = weird_child
+        #    weird_child = weird_child.left
+        #   location = location.left
+        #   print(str(new))
         return new
-
 
     def insert(self, value):
         '''
@@ -179,10 +176,10 @@ class AVLTree(BST):
         so I recommend including that code here.
         '''
         # if root +2
-            # if left node -1
-                # left rot left node - left right node
-            # right rot root left node
+        #    if left node -1
+        #        left rot left node - left right node
+        #    right rot root left node
         # elif root -2
-            # if left node 1
-                # rot right left node - right node
-            # left rot root - right node
+        #    if left node 1
+        #        rot right left node - right node
+        #    left rot root - right node
