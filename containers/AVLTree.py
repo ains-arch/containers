@@ -79,13 +79,14 @@ class AVLTree(BST):
         # all left children of old right become right children of old root
         # BF: -2 -> [0, 1, 2]
         # have separate case for root
-        new = AVLTree()
-        new.root = Node(node.right.value)
-        new.root.left = Node(node.value)
-        new.root.right = node.right.right
-        new.root.left.left = node.left
-        new.root.left.right = node.right.left
-        return new
+        if node.right:
+            new_root = Node(node.right.value)
+            new_root.left = Node(node.value)
+            new_root.right = node.right.right
+            new_root.left.left = node.left
+            new_root.left.right = node.right.left
+            return new_root
+        return node
 
     @staticmethod
     def _right_rotate(node):
@@ -98,6 +99,14 @@ class AVLTree(BST):
         The textbook's class hierarchy for their AVL tree code is fairly different from our class hierarchy,
         however, so you will have to adapt their code.
         '''
+        if node.left:
+            new_root = Node(node.left.value)  # old left becomes parent
+            new_root.right = Node(node.value)  # old root becomes right child
+            new_root.left = node.left.left  # left_child
+            new_root.right.right = node.right
+            new_root.right.left = node.left.right
+            return new_root
+        return node
         # old left child - old root
         # old left becomes parent
         # old root becomes right child of old left
@@ -106,14 +115,10 @@ class AVLTree(BST):
         # all right children of old left become left children of old right
         # BF: 2 -> [-2, -1, 0]
         # have separate case for root
-        new = AVLTree()
-        new.root = Node(node.left.value)  # old left becomes parent
         # print(str(new))
-        new.root.right = Node(node.value)  # old root becomes right child
         # print(str(new))
         # left_child = node.left.left # all left children of old left
         # print("left_child=", left_child)
-        new.root.left = node.left.left  # left_child
         # print(str(new))
         # location = new.root
         # print("location=", location)
@@ -124,7 +129,6 @@ class AVLTree(BST):
         #  location = location.left
         #  print("location=", location)
         #  print(str(new))
-        new.root.right.right = node.right
         # print(str(new))
         # right_child = node.right
         # print("right_child=", right_child)
@@ -136,8 +140,6 @@ class AVLTree(BST):
         #  print("right_child=", right_child)
         #  location = location.right
         #  print("location=", location)
-        #  print(str(new))
-        new.root.right.left = node.left.right
         # print(str(new))
         # weird_child = node.left.right
         # location = new.root.right
@@ -146,7 +148,6 @@ class AVLTree(BST):
         #    weird_child = weird_child.left
         #   location = location.left
         #   print(str(new))
-        return new
 
     def insert(self, value):
         '''
@@ -163,10 +164,29 @@ class AVLTree(BST):
         The code should look very similar to the code for your insert function for the BST,
         but it will also call the left and right rebalancing functions.
         '''
+        if self.root:
+            self._insert(value, self.root)
+            self.root = AVLTree._rebalance(self.root)
+        else:
+            self.root = Node(value)
         # BST insert by trolling down the tree and sticking it where it goes
         # for each ancestor node check bf
         # if any of the ancestor nodes became +/= 2, rebalance
         # if BF = +2, right rotation old left child - old root
+
+    @staticmethod
+    def _insert(value, node):
+        if value < node.value:
+            if node.left:
+                AVLTree._insert(value, node.left)
+            else:
+                node.left = Node(value)
+        else:
+            if node.right:
+                AVLTree._insert(value, node.right)
+            else:
+                node.right = Node(value)
+
     @staticmethod
     def _rebalance(node):
         '''
@@ -183,3 +203,18 @@ class AVLTree(BST):
         #    if left node 1
         #        rot right left node - right node
         #    left rot root - right node
+        if AVLTree._balance_factor(node) > 1:
+            if AVLTree._balance_factor(node.left) < 0:
+                node.left = AVLTree._left_rotate(node.left)
+            node = AVLTree._right_rotate(node)
+        elif AVLTree._balance_factor(node) < -1:
+            if AVLTree._balance_factor(node.right) > 0:
+                node.right = AVLTree._right_rotate(node.right)
+            node = AVLTree._left_rotate(node)
+        while not AVLTree._is_avl_satisfied(node):
+            if node.left:
+                node.left = AVLTree._rebalance(node.left)
+            if node.right:
+                node.right = AVLTree._rebalance(node.right)
+        else:
+            return node
