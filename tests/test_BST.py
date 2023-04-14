@@ -307,19 +307,8 @@ def test__BST_iterable_1():
     except StopIteration:
         pass
 
-
 @given(xs=ints)
 def test__BST_iterable_2(xs):
-    xs = list(set(xs))
-
-    xs1 = copy.copy(xs)
-    random.shuffle(xs1)
-    bst1 = BST(xs1)
-
-    xs2 = copy.copy(xs)
-    random.shuffle(xs2)
-    bst2 = BST(xs2)
-
     assert list(bst1) == list(bst2)
 
 
